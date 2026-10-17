@@ -1,0 +1,473 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#eaf4f5">
+  <title>INFINE — Beyond the Ordinary</title>
+  <style>
+    :root {
+      --bg: #f8faf8;
+      --card: #ffffff;
+      --text: #253a33;
+      --muted: #718078;
+      --accent: #45695b;
+      --soft: #e7f1ed;
+      --border: #e2e9e4;
+    }
+
+    body.dark {
+      --bg: #17231f;
+      --card: #22312b;
+      --text: #f1f5f2;
+      --muted: #b3c0b8;
+      --accent: #a6d0b8;
+      --soft: #2b4036;
+      --border: #3b4a42;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+    }
+
+    button, input { font: inherit; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 5%;
+    }
+
+    .top, .tools, .product-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      font-family: Georgia, serif;
+      font-size: 27px;
+      letter-spacing: 4px;
+      font-weight: bold;
+    }
+
+    .tagline {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    button {
+      cursor: pointer;
+      border: 0;
+      border-radius: 9px;
+      padding: 11px 14px;
+    }
+
+    .outline {
+      background: var(--soft);
+      color: var(--text);
+    }
+
+    .search {
+      width: 100%;
+      padding: 13px;
+      margin-top: 14px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      border-radius: 10px;
+    }
+
+    main {
+      max-width: 1100px;
+      padding: 20px 16px 110px;
+      margin: auto;
+    }
+
+    .hero {
+      padding: 30px 22px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #e2f0f3, #f5efe2, #e0ece2);
+      color: #30473c;
+      margin-bottom: 26px;
+    }
+
+    .hero h1 {
+      font-family: Georgia, serif;
+      font-size: clamp(30px, 7vw, 48px);
+      margin: 8px 0;
+    }
+
+    .hero p { line-height: 1.6; }
+
+    .eyebrow {
+      letter-spacing: 3px;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .categories {
+      display: flex;
+      gap: 9px;
+      overflow-x: auto;
+      padding: 5px 0 18px;
+    }
+
+    .categories button {
+      flex-shrink: 0;
+      background: var(--soft);
+      color: var(--text);
+    }
+
+    h2 { font-size: 22px; }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 13px;
+    }
+
+    .product {
+      min-width: 0;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .product img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 4.5;
+      object-fit: cover;
+      background: var(--soft);
+    }
+
+    .product-info { padding: 12px; }
+
+    .product h3 {
+      font-size: 14px;
+      line-height: 1.4;
+      min-height: 39px;
+      margin: 0 0 8px;
+    }
+
+    .price { font-weight: bold; }
+    .muted { color: var(--muted); font-size: 12px; }
+
+    .add {
+      background: var(--accent);
+      color: white;
+      font-size: 13px;
+      padding: 10px;
+    }
+
+    body.dark .add { color: #17231f; }
+
+    .cart-panel {
+      position: fixed;
+      z-index: 10;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      padding: 13px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 -4px 20px #0000000b;
+    }
+
+    .cart-panel strong { display: block; margin-bottom: 3px; }
+
+    #cartItems {
+      padding: 0;
+      list-style: none;
+    }
+
+    #cartItems li {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .qty {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .qty button { background: var(--soft); color: var(--text); }
+
+    dialog {
+      width: min(92%, 480px);
+      max-height: 80vh;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--card);
+      color: var(--text);
+      padding: 20px;
+    }
+
+    dialog::backdrop { background: #0008; }
+
+    footer {
+      text-align: center;
+      padding: 30px 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media (min-width: 700px) {
+      .products { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .product h3 { font-size: 16px; }
+      main { padding-top: 28px; }
+    }
+
+    @media (min-width: 950px) {
+      .products { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="top">
+      <div>
+        <div class="brand">INFINE</div>
+        <div class="tagline">Beyond the Ordinary</div>
+      </div>
+      <div class="tools">
+        <button class="outline" id="themeBtn" aria-label="Toggle theme">☾</button>
+        <button class="outline" id="cartBtn">Cart (<span id="cartCount">0</span>)</button>
+      </div>
+    </div>
+    <input class="search" id="search" type="search"
+      placeholder="Search perfumes, candles, soaps...">
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">A little luxury, every day</div>
+      <h1>Discover your<br>everyday elegance.</h1>
+      <p>Thoughtful scents and essentials, made for your moments.</p>
+      <button class="outline" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">
+        Explore Collection →
+      </button>
+    </section>
+
+    <nav class="categories" aria-label="Product categories">
+      <button data-category="All">All Products</button>
+      <button data-category="Perfumes">Perfumes</button>
+      <button data-category="Candles">Candles</button>
+      <button data-category="Soaps">Soaps</button>
+    </nav>
+
+    <section id="shop">
+      <div class="top">
+        <h2>Our Collection</h2>
+        <select id="sort" class="search" style="width:auto;margin:0">
+          <option value="featured">Featured</option>
+          <option value="low">Price: Low to High</option>
+          <option value="high">Price: High to Low</option>
+        </select>
+      </div>
+      <p class="muted">Explore the INFINE collection.</p>
+      <div class="products" id="products"></div>
+      <p id="empty" hidden>No products found. Try another search.</p>
+    </section>
+
+    <footer>INFINE · Beyond the Ordinary<br>Demo store for development and testing.</footer>
+  </main>
+
+  <div class="cart-panel">
+    <div>
+      <strong>Shopping Cart · <span id="barCount">0</span> items</strong>
+      <span class="muted">Total: ₹<span id="barTotal">0</span></span>
+    </div>
+    <button class="add" id="openCart">View Cart →</button>
+  </div>
+
+  <dialog id="cartDialog">
+    <div class="top">
+      <h2>Your Cart</h2>
+      <button class="outline" id="closeCart">✕</button>
+    </div>
+    <ul id="cartItems"></ul>
+    <h3>Total: ₹<span id="dialogTotal">0</span></h3>
+    <p class="muted">Checkout will be added in a later step.</p>
+    <button class="add" id="demoCheckout">Continue (Demo)</button>
+    <p id="cartMessage" role="status"></p>
+  </dialog>
+
+  <script>
+    const products = [
+      {
+        id: 1, name: "Signature Eau de Parfum",
+        category: "Perfumes", price: 799,
+        image: "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: 2, name: "Floral Essence Perfume",
+        category: "Perfumes", price: 649,
+        image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: 3, name: "Solid Perfume Balm",
+        category: "Perfumes", price: 349,
+        image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: 4, name: "Amber Glow Candle",
+        category: "Candles", price: 399,
+        image: "https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: 5, name: "Calm Evening Candle",
+        category: "Candles", price: 449,
+        image: "https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: 6, name: "Botanical Soap Bar",
+        category: "Soaps", price: 149,
+        image: "https://images.unsplash.com/photo-1600857544200-b2f666a9a2ec?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: 7, name: "Honey & Oat Soap",
+        category: "Soaps", price: 179,
+        image: "https://images.unsplash.com/photo-1600428853876-fb5a850b444f?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: 8, name: "Herbal Care Soap",
+        category: "Soaps", price: 129,
+        image: "https://images.unsplash.com/photo-1607006483224-5eab6a6a6b20?auto=format&fit=crop&w=700&q=80"
+      }
+    ];
+
+    const cart = {};
+    let category = "All";
+
+    const money = n => n.toLocaleString("en-IN");
+
+    function renderProducts() {
+      const query = document.getElementById("search").value.trim().toLowerCase();
+      const sort = document.getElementById("sort").value;
+
+      let list = products.filter(p =>
+        (category === "All" || p.category === category) &&
+        (p.name.toLowerCase().includes(query) ||
+         p.category.toLowerCase().includes(query))
+      );
+
+      if (sort === "low") list.sort((a, b) => a.price - b.price);
+      if (sort === "high") list.sort((a, b) => b.price - a.price);
+
+      document.getElementById("empty").hidden = list.length > 0;
+
+      document.getElementById("products").innerHTML = list.map(p => `
+        <article class="product">
+          <img src="${p.image}" alt="${p.name}" loading="lazy">
+          <div class="product-info">
+            <p class="muted">${p.category}</p>
+            <h3>${p.name}</h3>
+            <div class="product-bottom">
+              <span class="price">₹${money(p.price)}</span>
+              <button class="add" data-add="${p.id}">Add +</button>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function renderCart() {
+      const items = products.filter(p => cart[p.id] > 0);
+      const count = items.reduce((sum, p) => sum + cart[p.id], 0);
+      const total = items.reduce((sum, p) => sum + p.price * cart[p.id], 0);
+
+      document.getElementById("cartCount").textContent = count;
+      document.getElementById("barCount").textContent = count;
+      document.getElementById("barTotal").textContent = money(total);
+      document.getElementById("dialogTotal").textContent = money(total);
+
+      document.getElementById("cartItems").innerHTML = items.map(p => `
+        <li>
+          <strong>${p.name}</strong>
+          <div>₹${money(p.price)} × ${cart[p.id]}</div>
+          <div class="qty">
+            <button data-change="${p.id}" data-delta="-1">−</button>
+            <span>${cart[p.id]}</span>
+            <button data-change="${p.id}" data-delta="1">+</button>
+            <button data-remove="${p.id}">Remove</button>
+          </div>
+        </li>
+      `).join("") || "<li>Your cart is empty.</li>";
+    }
+
+    document.getElementById("products").addEventListener("click", e => {
+      const btn = e.target.closest("[data-add]");
+      if (!btn) return;
+      const id = Number(btn.dataset.add);
+      cart[id] = (cart[id] || 0) + 1;
+      renderCart();
+      btn.textContent = "Added ✓";
+      setTimeout(() => { btn.textContent = "Add +"; }, 700);
+    });
+
+    document.getElementById("cartItems").addEventListener("click", e => {
+      const change = e.target.closest("[data-change]");
+      const remove = e.target.closest("[data-remove]");
+
+      if (change) {
+        const id = Number(change.dataset.change);
+        cart[id] = (cart[id] || 0) + Number(change.dataset.delta);
+        if (cart[id] <= 0) delete cart[id];
+      }
+
+      if (remove) delete cart[Number(remove.dataset.remove)];
+      renderCart();
+    });
+
+    document.querySelector(".categories").addEventListener("click", e => {
+      const btn = e.target.closest("[data-category]");
+      if (!btn) return;
+      category = btn.dataset.category;
+      renderProducts();
+    });
+
+    document.getElementById("search").addEventListener("input", renderProducts);
+    document.getElementById("sort").addEventListener("change", renderProducts);
+
+    const dialog = document.getElementById("cartDialog");
+    document.getElementById("cartBtn").onclick = () => dialog.showModal();
+    document.getElementById("openCart").onclick = () => dialog.showModal();
+    document.getElementById("closeCart").onclick = () => dialog.close();
+
+    document.getElementById("demoCheckout").onclick = () => {
+      document.getElementById("cartMessage").textContent =
+        "Demo only: secure checkout will be connected in a later step.";
+    };
+
+    document.getElementById("themeBtn").onclick = () => {
+      document.body.classList.toggle("dark");
+      document.getElementById("themeBtn").textContent =
+        document.body.classList.contains("dark") ? "☀" : "☾";
+    };
+
+    renderProducts();
+    renderCart();
+  </script>
+</body>
+</html>
